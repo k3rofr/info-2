@@ -1,0 +1,262 @@
+/* ========================================================
+   1. GLOBAL & LAYOUT STYLES
+   ======================================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #0b0b0b;
+    color: #ffffff;
+    font-family: 'Poetsen One', sans-serif;
+    overflow: hidden;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    perspective: 1000px; /* Required for the 3D card tilt effect */
+}
+
+/* Center Container */
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+}
+
+/* Profile Card Styling with 3D effects */
+.below-center {
+    background: rgba(20, 20, 20, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 40px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    width: 350px;
+    transform-style: preserve-3d; /* Allows nested elements to look 3D */
+    transition: transform 0.1s ease, box-shadow 0.3s ease;
+}
+
+.below-center:hover {
+    box-shadow: 0 30px 60px rgba(255, 255, 255, 0.05);
+}
+
+/* Profile Elements */
+.logo {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-bottom: 15px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+}
+
+/* Rainbow Text Effect */
+.rainbow-text {
+    font-size: 1.2rem;
+    background: linear-gradient(to right, #ff7b00, #ff007f, #7f00ff, #007fff, #00ff7f);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shine 3s linear infinite;
+    margin-bottom: 25px;
+}
+
+@keyframes shine {
+    to { background-position: 200% center; }
+}
+
+/* Buttons & Social Links */
+button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin: 0 10px 20px 10px;
+    transition: transform 0.2s ease;
+}
+
+button:hover {
+    transform: scale(1.15);
+}
+
+button img, .muteButton {
+    width: 32px;
+    height: 32px;
+    filter: drop-shadow(0 0 5px rgba(255,255,255,0.3));
+}
+
+.links {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 10px;
+}
+
+.links a img {
+    width: 35px;
+    height: 35px;
+    filter: invert(1); /* Keeps icons white on dark background */
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.links a img:hover {
+    transform: translateY(-5px);
+    filter: invert(1) drop-shadow(0 0 8px rgba(255, 255, 255, 0.8));
+}
+
+/* Hide Background Media Elements */
+#video, #audio {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.15; /* Keeps background video subtle */
+}
+
+/* Click Overlay */
+.click {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000000;
+    z-index: 99999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.click h3 {
+    font-size: 2rem;
+    letter-spacing: 2px;
+    animation: pulse 1.5s infinite alternate;
+}
+
+@keyframes pulse {
+    0% { opacity: 0.3; }
+    100% { opacity: 1; }
+}
+
+
+/* ========================================================
+   2. NEW DYNAMIC EFFECTS (GLOW CURSOR & EQUALIZER)
+   ======================================================== */
+
+/* Interactive Mouse Trail */
+.cursor-trail {
+    width: 20px;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.25);
+    border-radius: 50%;
+    position: fixed;
+    transform: translate(-50%, -50%);
+    pointer-events: none; /* Let clicks pass right through */
+    transition: transform 0.08s ease-out, background 0.3s ease;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.5), 0 0 30px rgba(255, 255, 255, 0.2);
+    z-index: 99999;
+}
+
+/* Audio Equalizer Animation */
+.equalizer {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    height: 24px;
+    gap: 4px;
+    margin: 0 auto 20px auto;
+    width: max-content;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.equalizer.active {
+    opacity: 1;
+}
+
+.equalizer.paused .bar {
+    animation-play-state: paused;
+    height: 20%;
+}
+
+.bar {
+    width: 4px;
+    height: 100%;
+    background: #ffffff;
+    border-radius: 2px;
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+    animation: bounce 0.8s ease-in-out infinite alternate;
+}
+
+.bar:nth-child(1) { animation-duration: 0.6s; animation-delay: 0.1s; }
+.bar:nth-child(2) { animation-duration: 0.4s; animation-delay: 0.3s; }
+.bar:nth-child(3) { animation-duration: 0.7s; animation-delay: 0.0s; }
+.bar:nth-child(4) { animation-duration: 0.5s; animation-delay: 0.2s; }
+
+@keyframes bounce {
+    0% { height: 20%; }
+    100% { height: 100%; }
+}
+
+
+/* ========================================================
+   3. RAIN BACKGROUND EFFECT
+   ======================================================== */
+.rain {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.drop {
+    position: absolute;
+    background: linear-gradient(transparent, rgba(255, 255, 255, 0.2));
+    width: 1px;
+    height: 80px;
+    opacity: 0.7;
+    animation: fall 1.2s linear infinite;
+}
+
+/* Random positions for your 18 drops */
+.drop:nth-child(1) { left: 5%; animation-delay: 0.2s; animation-duration: 1.1s; }
+.drop:nth-child(2) { left: 10%; animation-delay: 0.7s; animation-duration: 1.3s; }
+.drop:nth-child(3) { left: 17%; animation-delay: 0.1s; animation-duration: 1.0s; }
+.drop:nth-child(4) { left: 25%; animation-delay: 0.5s; animation-duration: 1.4s; }
+.drop:nth-child(5) { left: 32%; animation-delay: 0.9s; animation-duration: 1.1s; }
+.drop:nth-child(6) { left: 38%; animation-delay: 0.3s; animation-duration: 1.2s; }
+.drop:nth-child(7) { left: 45%; animation-delay: 0.6s; animation-duration: 1.0s; }
+.drop:nth-child(8) { left: 52%; animation-delay: 0.2s; animation-duration: 1.5s; }
+.drop:nth-child(9) { left: 58%; animation-delay: 0.8s; animation-duration: 1.2s; }
+.drop:nth-child(10) { left: 65%; animation-delay: 0.4s; animation-duration: 1.1s; }
+.drop:nth-child(11) { left: 71%; animation-delay: 0.1s; animation-duration: 1.3s; }
+.drop:nth-child(12) { left: 78%; animation-delay: 0.7s; animation-duration: 1.0s; }
+.drop:nth-child(13) { left: 83%; animation-delay: 0.3s; animation-duration: 1.4s; }
+.drop:nth-child(14) { left: 88%; animation-delay: 0.9s; animation-duration: 1.2s; }
+.drop:nth-child(15) { left: 93%; animation-delay: 0.5s; animation-duration: 1.1s; }
+.drop:nth-child(16) { left: 96%; animation-delay: 0.2s; animation-duration: 1.3s; }
+.drop:nth-child(17) { left: 2%;  animation-delay: 0.8s; animation-duration: 1.4s; }
+.drop:nth-child(18) { left: 61%; animation-delay: 0.4s; animation-duration: 1.0s; }
+
+@keyframes fall {
+    0% { top: -100px; }
+    100% { top: 100%; }
+}
