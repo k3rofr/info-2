@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>k3ro's Info</title>
+    <link rel="stylesheet" href="index.css">
+    <link rel="icon" type="image/x-icon" href="https://githubusercontent.com">
+    <link href="https://googleapis.com" rel="stylesheet">
+</head>
+<body id="body">
+    <!-- Custom Cursor Trail HTML Element -->
+    <div class="cursor-trail" id="cursorTrail"></div>
+
+    <div class="rain">
+        <div class="drop"></div><div class="drop"></div><div class="drop"></div>
+        <div class="drop"></div><div class="drop"></div><div class="drop"></div>
+        <div class="drop"></div><div class="drop"></div><div class="drop"></div>
+        <div class="drop"></div><div class="drop"></div><div class="drop"></div>
+        <div class="drop"></div><div class="drop"></div><div class="drop"></div>
+        <div class="drop"></div><div class="drop"></div><div class="drop"></div>
+    </div>
+    
+    <div id="click" class="click"><h3>Click Here</h3></div>
+    <video id="video"></video>
+    <audio id="audio"></audio>
+    
+    <div class="center">
+        <div class="below-center">
+            <!-- Equalizer UI HTML Element -->
+            <div class="equalizer" id="equalizer">
+                <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+            </div>
+
+            <button id="muteButton"><img src="assets/icons/mute.png" class="muteButton"></button>
+            <script>
+                muteButton.addEventListener("click", () => {
+                    audio.muted = !audio.muted;
+                    // Toggles equalizer animation on mute
+                    document.getElementById("equalizer").classList.toggle("paused", audio.muted);
+                });
+            </script>
+            
+            <button id="playNext"><img src="assets/icons/playnext.svg"></button>
+            <script>playNext.addEventListener("click", () => {playRandom();});</script>
+            
+            <img src="https://githubusercontent.com" class="logo" />
+            <h1>k3ro</h1>
+            <p class="rainbow-text"> Code>>> </p>
+            
+            <div class="links">
+                <a href="https://github.com" target="_blank">
+                    <img src="assets/icons/Octicons-mark-github.svg" class="Github"/>
+                </a>
+                <a href="https://steamcommunity.com" target="_blank">
+                    <img src="assets/icons/steam-symbol-svgrepo-com.svg" class="Steam"/>
+                </a>
+                <a href="https://discord.com" target="_blank">
+                    <img src="assets/icons/discord.svg" class="Discord"/>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const sounds = [
+            "assets/videos/How it go [Official Audio] (1).mp4",
+            "assets/videos/Systëm [Official Audio].mp4",
+            "assets/videos/On tha line [Official Music Video].mp4",
+            "assets/videos/Monëy Twerk [Official Music Vidëo] (1).mp4",
+            "assets/videos/Gët Busy [Official Music Video].mp4",
+            "assets/videos/FATE (BONUS) [OFFICIAL AUDIO].mp4",
+            "assets/videos/Yeat & EsDeeKid - Made It On Our Own (Official Music Video).mp4"
+        ];
+        let currentIndex = -1;
+        const video = document.getElementById("video");
+        const audio = document.getElementById("audio");
+
+        function getRandomIndex() {
+            let newIndex;
+            do {
+                newIndex = Math.floor(Math.random() * sounds.length);
+            } while (newIndex === currentIndex);
+            return newIndex;
+        }
+
+        function playRandom() {
+            currentIndex = getRandomIndex();
+            const file = sounds[currentIndex];
+            video.src = file;
+            audio.src = file;
+            video.play();
+            audio.play();
+        }
+
+        video.addEventListener("ended", playRandom);
+
+        window.onclick = function () {
+            playRandom();
+            video.volume = 0;
+            audio.volume = 1;
+            
+            const click = document.getElementById("click");
+            if (click) click.remove();
+            
+            // ACTIVATE EQUALIZER UI ON FIRST CLICK
+            const eq = document.getElementById("equalizer");
+            if (eq) eq.classList.add("active");
+
+            window.onclick = null;
+        };
+
+        document.addEventListener("keydown", (event) => {
+            if (event.key === "F12" || (event.ctrlKey && event.shiftKey && event.key === "I")) {
+                event.preventDefault();
+                window.open("https://github.io", "_blank");
+            }
+        });
+
+        /*<div class="equalizer" id="equalizer">
+  <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+</div> */
+
+        // 1. Interactive Mouse Trail Script
+        const trail = document.getElementById("cursorTrail");
+        document.addEventListener("mousemove", (e) => {
+            trail.style.left = e.clientX + "px";
+            trail.style.top = e.clientY + "px";
+        });
+
+        // 2. 3D Card Tilt Script
+        const card = document.querySelector('.below-center');
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+            card.style.transform = `rotateY(${x / 15}deg) rotateX(${-y / 15}deg)`;
+        });
+
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = 'rotateY(0deg) rotateX(0deg)';
+        });
+    </script>
+</body>
+</html>
